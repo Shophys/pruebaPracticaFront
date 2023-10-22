@@ -1,0 +1,55 @@
+<ngb-alert *ngIf="errorMessage" type="danger" (closed)="errorMessage = ''">{{errorMessage}}</ngb-alert>
+<div class="d-flex justify-content-center w-100 align-items-center">
+  <div *ngIf="loading" class="spinner-border text-primary" role="status">
+    <span class="visually-hidden">Loading...</span>
+  </div>
+<form *ngIf="!loading" class="w-50 bg-primary-subtle p-3" [formGroup]="searchForm" (ngSubmit)="send()">
+
+  <p class="text-body-tertiary">Todos los campos son obligatorios</p>
+  <div class="mb-3">
+    <label for="labelTypeNumber" class="form-label text-primary">Tipo de documento</label>
+    <select class="form-select" formControlName="typeNumber">
+      <option selected value="">Seleccione</option>
+      <option value="C">Cédula de ciudadanía</option>
+      <option value="P">Pasaporte</option>
+    </select>
+    <div *ngIf="searchForm.get('typeNumber')?.invalid &&
+        searchForm.get('typeNumber')?.errors &&
+        (searchForm.get('typeNumber')?.dirty || searchForm.get('typeNumber')?.touched)">
+    <small class="text-danger"
+        *ngIf="searchForm.get('typeNumber')?.hasError('required')">
+        Este campo es requerido
+    </small>
+    </div>
+  </div>
+  <div class="mb-3">
+    <label for="labelDocNumber" class="col-form-label text-primary">Numero de documento</label>
+      <input type="text"
+      formControlName="docNumber"
+      class="form-control"
+      id="docNumber">
+    <div *ngIf="searchForm.get('docNumber')?.invalid &&
+        searchForm.get('docNumber')?.errors &&
+        (searchForm.get('docNumber')?.dirty || searchForm.get('docNumber')?.touched)">
+    <small class="text-danger"
+        *ngIf="searchForm.get('docNumber')?.hasError('required')">
+        Este campo es requerido
+    </small>
+    <small class="text-danger"
+    *ngIf="searchForm.get('docNumber')?.hasError('pattern')">
+    Este campo no tiene el formato correcto
+</small>
+    <small class="text-danger"
+    *ngIf="searchForm.get('docNumber')?.hasError('minlength')">
+    Este campo debe tener al menos 8 caracteres
+</small>
+<small class="text-danger"
+*ngIf="searchForm.get('docNumber')?.hasError('maxlength')">
+    Este campo debe tener maximo 11 caracteres
+</small>
+</div>
+  </div>
+  <button type="submit" [disabled]="searchForm.invalid" [ngClass]="searchForm.invalid ? 'btn btn-secondary' : 'btn btn-primary'" >Buscar</button>
+</form>
+</div>
+
